@@ -1,4 +1,4 @@
-import { ChangeObject } from "./diff-kernel/change_object";
+import { ChangeObject } from "./common/change_object";
 import { ApplyChange } from "./diff-kernel/change_tools";
 
 export function verify(old_string: string, new_string: string, changes: ChangeObject[]) : boolean {

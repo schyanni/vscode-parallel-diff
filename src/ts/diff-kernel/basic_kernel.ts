@@ -1,4 +1,5 @@
-import { ChangeObject } from "./change_object";
+import { ChangeObject } from "../common/change_object";
+import { ParallelOptions } from "../common/parallel_options";
 import { PathMatrix } from "./path_matrix";
 import { ReconstrunctPath, BuildChangeObjects } from "./path_tools";
 
@@ -47,14 +48,14 @@ function BuildDPath(left: string, right: string): [number, PathMatrix] {
     return [-1, new PathMatrix()]
 }
 
-export function greedy_diff(left: string, right: string): ChangeObject[] {
+export function greedy_diff(old_string: string, new_string: string, parallel_options?: ParallelOptions | undefined): ChangeObject[] {
     let d_level: number
     let path_matrix: PathMatrix
     let changeObjects: ChangeObject[]
 
-    [d_level, path_matrix] = BuildDPath(left, right);
+    [d_level, path_matrix] = BuildDPath(old_string, new_string);
 
-    let path: [number, number][] = ReconstrunctPath(left, d_level, path_matrix);
-    changeObjects = BuildChangeObjects(left, right, path);
+    let path: [number, number][] = ReconstrunctPath(old_string, d_level, path_matrix);
+    changeObjects = BuildChangeObjects(old_string, new_string, path);
     return changeObjects;
 }

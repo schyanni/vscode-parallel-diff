@@ -1,5 +1,5 @@
 import { PathMatrix } from "./path_matrix";
-import { ChangeObject } from "./change_object";
+import { ChangeObject } from "../common/change_object";
 
 export function ReconstrunctPath(left: string, path_length: number, path_matrix: PathMatrix): [number, number][] {
     function FindDiagonal(x_coord: number, d_level: number, path_matrix: PathMatrix): number {

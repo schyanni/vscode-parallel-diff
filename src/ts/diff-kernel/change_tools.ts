@@ -1,4 +1,4 @@
-import { ChangeObject } from "./change_object";
+import { ChangeObject } from "../common/change_object";
 
 export function ApplyChange(input: string, changeObjects: ChangeObject[]): string {
     let index: number = 0;

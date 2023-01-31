@@ -1,6 +1,6 @@
 import { greedy_diff } from './diff-kernel/basic_kernel'
 import { default_diff } from './diff-default/default_kernel'
-import { ChangeObject } from './diff-kernel/change_object'
+import { ChangeObject } from './common/change_object'
 import { Change } from 'diff'
 
 let left: string = 'abcd ich bin daheim'
