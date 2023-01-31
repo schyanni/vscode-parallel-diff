@@ -105,19 +105,22 @@ function BuildChangeObjects(left: string, right: string, path: [number, number][
 
         if (x_dist > y_dist) {
             // there is one horizontal segment + snake
-            changeObjects.push({ value: left[current[0]], added: false, removed: true });
+            changeObjects.push({count: 1, removed: true, value: left[current[0]] });
             if (y_dist > 0) {
-                changeObjects.push({ value: left.substring(current[0] + 1, next[0]), added: false, removed: false });
+                const value: string = left.substring(current[0] + 1, next[0]);
+                changeObjects.push({count: value.length, value: value});
             }
         } else if (y_dist > x_dist) {
             // there is one vertical segment + snake
-            changeObjects.push({ value: right[current[1]], added: true, removed: false });
+            changeObjects.push({count: 1, added: true, value: right[current[1]]});
             if (x_dist > 0) {
-                changeObjects.push({ value: left.substring(current[0], next[0]), added: false, removed: false });
+                const value: string = left.substring(current[0], next[0]);
+                changeObjects.push({count: value.length, value: value});
             }
-        } else {
+        } else if(x_dist > 0) {
             // there is only snake
-            changeObjects.push({ value: left.substring(current[0], next[0]), added: false, removed: false });
+            const value: string = left.substring(current[0], next[0]);
+            changeObjects.push({count: value.length, value: value});
         }
         current = next;
     }
