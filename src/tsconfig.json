@@ -5,6 +5,6 @@
         "sourceMap": true
     },
     "include": [
-        "ts/*"
+        "ts/**/*"
     ]
 }
