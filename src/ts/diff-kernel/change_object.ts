@@ -1,5 +1,2 @@
-export interface ChangeObject {
-    value: string,
-    added: boolean,
-    removed: boolean
-}
+import { Change } from 'diff'
+export interface ChangeObject extends Change{}
