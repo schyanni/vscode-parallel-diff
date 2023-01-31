@@ -46,7 +46,7 @@ function BuildDPath(left: string, right: string): [number, PathMatrix] {
     return [-1, new PathMatrix()]
 }
 
-function ReconstrunctPath(path_length: number, path_matrix: PathMatrix): [number, number][] {
+function ReconstrunctPath(left: string, path_length: number, path_matrix: PathMatrix): [number, number][] {
     function FindDiagonal(x_coord: number, d_level: number, path_matrix: PathMatrix): number {
         for (let k: number = -d_level; k <= d_level; k += 2) {
             if (path_matrix.get(path_length, k) == x_coord) {
@@ -142,40 +142,14 @@ function ApplyChange(input: string, changeObjects: ChangeObject[]): string {
     return result;
 }
 
-export function GreedyDiff(left: string, right: string): ChangeObject[] {
+export function greedy_diff(left: string, right: string): ChangeObject[] {
     let d_level: number
     let path_matrix: PathMatrix
     let changeObjects: ChangeObject[]
 
     [d_level, path_matrix] = BuildDPath(left, right);
-    path_matrix.print()
 
-    changeObjects = [];
+    let path: [number, number][] = ReconstrunctPath(left, d_level, path_matrix);
+    changeObjects = BuildChangeObjects(left, right, path);
     return changeObjects;
-}
-
-let left: string = 'abcd boris eleme j;qw '
-let right: string = 'abbd bbrisasdf ;fjq   ;lkasjdf;lkj;l'
-
-let distance: number
-let path_matrix: PathMatrix
-
-[distance, path_matrix] = BuildDPath(left, right);
-console.log(`D-Path=${distance}`)
-path_matrix.print();
-
-
-let path: [number, number][] = ReconstrunctPath(distance, path_matrix);
-console.log(JSON.stringify(path));
-let changeObjects: ChangeObject[] = BuildChangeObjects(left, right, path);
-console.log(JSON.stringify(changeObjects));
-
-console.log(`Built: ${ApplyChange(left, changeObjects)}`);
-console.log(`Right: ${right}`);
-
-let is_same: boolean = ApplyChange(left, changeObjects) == right;
-if(is_same) {
-    console.log('Success !! Strings are the same');
-} else {
-    console.log('Fail !! Strings are not the same')
 }
