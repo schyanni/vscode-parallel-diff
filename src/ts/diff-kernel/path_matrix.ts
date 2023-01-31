@@ -57,3 +57,32 @@ export class PathMatrix {
         return result
     }
 }
+
+export class LevelledPathMatrix {
+    private path_arrays: number[][];
+
+    constructor() {
+        this.path_arrays = [];
+    }
+
+    public CreateLevel(d: number) : void {
+        for(let i: number = this.path_arrays.length; i <= d; i++) {
+            this.path_arrays[i] = new Array<number>(i+1);
+        }
+    }
+
+    private index(d_level: number, k_diagonal: number): number {
+        const offset: number = ((d_level + k_diagonal) / 2 >> 0);
+        return offset; // cast to integer
+    }
+
+    public set(d_level: number, k_diagonal: number, x: number): void {
+        let idx: number = this.index(d_level, k_diagonal);
+        this.path_arrays[d_level][idx] = x;
+    }
+
+    public get(d_level: number, k_diagonal: number): number {
+        let idx: number = this.index(d_level, k_diagonal);
+        return this.path_arrays[d_level][idx];
+    }
+}
