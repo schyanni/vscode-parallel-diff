@@ -25,9 +25,10 @@ The Javascript output will be created in the `src/js/` directory.
 ## API
 The general api for the different kernels looks as follows:
 ```ts
-import { Change } from 'diff'
+import { ChangeObject } from './diff-kernel/change_object'
+// import kernel
 
-let changes: Change[] = kernel(old_string, new_string);
+let changes: ChangeObject[] = kernel(old_string, new_string);
 ```
 
 The changes will contain the "edit script" to change `old_string` into `new_string`. The "edit script" is made up
@@ -35,9 +36,9 @@ of three different commands:
 1. keep
 2. delete
 3. add
-A `Change` is defined as follows:
+A `ChangeObject` is defined as follows:
 ```ts
-export interface Change {
+export interface ChangeObject {
     // Number of characters in value
     count?: number | undefined;
     // Characters/string handled by this change
