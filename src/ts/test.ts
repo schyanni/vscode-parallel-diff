@@ -3,39 +3,66 @@ import { default_diff } from './diff-default/default_kernel'
 import { ChangeObject } from './common/change_object'
 import { ParallelOptions } from './common/parallel_options'
 import { GenerateString, ChangeString } from './util/generate_string'
-import { verify } from './verify'
-import { AreTheSame } from './util/verity'
+import { AreEqual } from './util/verify'
 import { ApplyBackwardChange, ApplyForwardChange } from './diff-kernel/change_tools'
+import { inner_loop_parallel_diff } from './diff-kernel/inner_loop_parallel_kernel'
 
-let left: string = GenerateString(200);
+let left: string = GenerateString(12);
 let right: string = ChangeString(left, 0.2);
-let options: ParallelOptions = {threads:1, repeats:1, report: console.log}
+let options: ParallelOptions = { threads: 1, repeats: 1, report: console.log }
 
-let changeObjects: ChangeObject[] = greedy_diff(left, right, options);
-let changes : ChangeObject[] = default_diff(left, right, options);
+
 console.log('-------------------------')
 console.log(`Original String:`)
 console.log(left);
 console.log('-------------------------')
 console.log('Changed String:')
 console.log(right);
-console.log('-------------------------')
 
-console.log("My implementation: ")
-console.log(JSON.stringify(changeObjects))
+console.log("------------------------");
+console.log("Default implementation:");
+console.log("");
+default_diff(left, right, options)
+    .then((value) => {
+        let changes: ChangeObject[] = value;
+        console.log("------------------------");
+        console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
+        console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+    })
+    .then(() => {
+        console.log("------------------------");
+        console.log("Greedy Diff implementation:")
+        console.log("");
+    })
+    .then(() => greedy_diff(left, right, options))
+    .then((value) => {
+        let changes: ChangeObject[] = value;
+        console.log("------------------------");
+        console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
+        console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+    })
+    .then(() => {
+        console.log("------------------------");
+        console.log("Simple parallel implementation:")
+        console.log("");
+    })
+    .then(() => inner_loop_parallel_diff(left, right, options))
+    .then((value) => {
+        let changes: ChangeObject[] = value;
+        console.log("------------------------");
+        console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
+        console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+    })
+    .catch(() => {
+        console.error("something went wrong");
+    });
 
-console.log()
-console.log("Reference implementation:")
-console.log(JSON.stringify(changes))
-
-console.log()
-console.log('-------------------------')
-console.log(`Generate same output: ${AreTheSame(changes, changeObjects)}`)
-
-console.log()
-console.log('-------------------------')
-console.log(`Reference can change old_string into new_string: ${right == ApplyForwardChange(left, changes)}`)
-console.log(`Reference can change new_string into old_string: ${left == ApplyBackwardChange(right, changes)}`)
-console.log()
-console.log(`My implementation can change old_string into new_string: ${right == ApplyForwardChange(left, changeObjects)}`)
-console.log(`My implementation can change new_string into old_string: ${left == ApplyBackwardChange(right, changeObjects)}`)
+// inner_loop_parallel_diff(left, right, options).then((value) => {
+//     let changes: ChangeObject[] = value;
+//     console.log("------------------------");
+//     console.log("Simple Parallel implementation:")
+//     console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
+//     console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+// }).catch(() => {
+//     console.error("something went wrong")
+// });

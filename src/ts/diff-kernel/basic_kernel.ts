@@ -12,7 +12,7 @@ function BuildDPath(left: string, right: string): [number, PathMatrix] {
     // handle d=0
     x = 0;
     y = 0;
-    while (x < left.length && y <= right.length && left[x] == right[y]) {
+    while (x < left.length && y < right.length && left[x] == right[y]) {
         x++;
         y++;
     }
@@ -49,7 +49,7 @@ function BuildDPath(left: string, right: string): [number, PathMatrix] {
     return [-1, new PathMatrix()]
 }
 
-export function greedy_diff(old_string: string, new_string: string, parallel_options?: ParallelOptions | undefined): ChangeObject[] {
+export async function greedy_diff(old_string: string, new_string: string, parallel_options?: ParallelOptions | undefined): Promise<ChangeObject[]> {
     let d_level: number
     let path_matrix: PathMatrix
     let changeObjects: ChangeObject[]
@@ -64,7 +64,7 @@ export function greedy_diff(old_string: string, new_string: string, parallel_opt
 
     let stop: any = performance.now();
 
-    if(typeof(parallel_options) != undefined && parallel_options.report != undefined) {
+    if(typeof(parallel_options) != undefined && parallel_options != undefined && parallel_options.report != undefined) {
         parallel_options.report(`compute [ms]: ${(middle as number) - (start as number)}`);
         parallel_options.report(`reconstruct [ms]: ${(stop as number) - (middle as number)}`);
         parallel_options.report(`total [ms]: ${(stop as number) - (start as number)}`);

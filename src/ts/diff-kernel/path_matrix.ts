@@ -3,7 +3,13 @@ interface DLevel {
     values: [number, number][]
 }
 
-export class PathMatrix {
+export interface IPathMatrix {
+    get(d_level: number, k_diagonal: number) : number;
+
+    set(d_level: number, k_diagonal: number, x:number) : void;
+}
+
+export class PathMatrix implements IPathMatrix {
     private path_array: number[];
 
     constructor() {
@@ -58,7 +64,7 @@ export class PathMatrix {
     }
 }
 
-export class LevelledPathMatrix {
+export class LevelledPathMatrix implements IPathMatrix {
     private path_arrays: number[][];
 
     constructor() {

@@ -1,6 +1,6 @@
 import { ChangeObject } from "../common/change_object";
 
-export function AreTheSame(expected: ChangeObject[], actual: ChangeObject[]) : boolean {
+export function AreEqual(expected: ChangeObject[], actual: ChangeObject[]) : boolean {
     if(expected.length != actual.length) {
         console.warn(`They do not have the same length! Expected: ${expected.length} and Actual: ${actual.length}`)
         return false;
