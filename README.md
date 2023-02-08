@@ -28,7 +28,7 @@ The general api for the different kernels looks as follows:
 import { ChangeObject } from './diff-kernel/change_object'
 // import kernel
 
-let changes: ChangeObject[] = kernel(old_string, new_string);
+let changes: ChangeObject[] = kernel(old_string, new_string, [parallel_options]);
 ```
 
 The changes will contain the "edit script" to change `old_string` into `new_string`. The "edit script" is made up
@@ -54,3 +54,17 @@ export interface ChangeObject {
 * added: if true, then the string in `value`  has been added in `new_string` as compared to `old_string`
 * removed: if true, then the string in `value` has been removed from `old_string`  as compared to `new_string`
 * if both `added` and `removed` are false (or unset/undefined), then `value` is contained in both, `new_string` and `old_string`
+
+`parallel_options` is an `ParallelOptions` object and an optional argument. If provided, then kernel that support paralellism can be instructed to use it. ParallelOptions looks as follows:
+```ts
+export interface ParallelOptions {
+    // the number of threads (=workers) to use
+    threads: number;
+    // the number of repetitions to perform (relevant for benchmarking)
+    repeats: number;
+    // whether the output should be verified => meant for testing during development of the algorithms
+    verify_solution?: boolean | undefined;
+    // a function that takes a string. If provided, then the kernel can use this to report/log timings
+    report?: ((message: string) => void) | undefined;
+}
+```
