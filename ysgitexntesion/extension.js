@@ -1,6 +1,8 @@
-
 const vscode = require('vscode');
 const fs = require('fs');
+
+import { greedy_diff } from './src/ts/diff-kernel/basic_kernel'
+
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -39,9 +41,11 @@ async function selectFilesCommand() {
     // Read the contents of the selected files
     const file1Content = await readFile(files[0].fsPath);
     const file2Content = await readFile(files[1].fsPath);
+    const FillDiffs  = await greedy_diff(file1Content, file2Content, undefined)
 
     // Just to test files
-    vscode.window.showInformationMessage(`Contents of file 1: ${file1Content}\nContents of file 2: ${file2Content}`);
+    //vscode.window.showInformationMessage(`Contents of file 1: ${file1Content}\nContents of file 2: ${file2Content}`);
+    vscode.window.showInformationMessage(`Contents of difffile ${FillDiffs}`);
 }
 
 // Read the contents of a file
