@@ -3,13 +3,12 @@ import { default_diff } from './diff-default/default_kernel'
 import { ChangeObject } from './common/change_object'
 import { ParallelOptions } from './common/parallel_options'
 import { GenerateString, ChangeString } from './util/generate_string'
-import { AreEqual } from './util/verify'
 import { ApplyBackwardChange, ApplyForwardChange } from './diff-kernel/change_tools'
 import { inner_loop_parallel_diff } from './diff-kernel/inner_loop_parallel_kernel'
 
 let left: string = GenerateString(12);
 let right: string = ChangeString(left, 0.2);
-let options: ParallelOptions = { threads: 1, repeats: 1, report: console.log }
+let options: ParallelOptions = { threads: 4, repeats: 1, report: console.log }
 
 
 console.log('-------------------------')
