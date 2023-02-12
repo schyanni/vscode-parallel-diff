@@ -35,6 +35,7 @@ default_diff(left, right, options)
         console.log("------------------------");
         console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
         console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+        console.log(`Number of changes: ${changes.length}`);
         //console.log(JSON.stringify(changes));
     })
     .then(() => {
@@ -48,6 +49,7 @@ default_diff(left, right, options)
         console.log("------------------------");
         console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
         console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+        console.log(`Number of changes: ${changes.length}`);
         //console.log(JSON.stringify(changes));
     })
     .then(() => {
@@ -61,6 +63,7 @@ default_diff(left, right, options)
         console.log("------------------------");
         console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
         console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+        console.log(`Number of changes: ${changes.length}`);
         //console.log(JSON.stringify(changes));
     })
     .then(() => {
@@ -74,6 +77,7 @@ default_diff(left, right, options)
         console.log("------------------------");
         console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
         console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+        console.log(`Number of changes: ${changes.length}`);
         //console.log(JSON.stringify(changes));
     })
     .then(() => {
@@ -87,6 +91,7 @@ default_diff(left, right, options)
         console.log("------------------------");
         console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
         console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+        console.log(`Number of changes: ${changes.length}`);
         //console.log(JSON.stringify(changes));
     })
     .catch(() => {
