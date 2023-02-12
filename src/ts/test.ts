@@ -1,6 +1,6 @@
 import { greedy_diff } from './diff-kernel/basic_kernel'
 import { default_diff } from './diff-default/default_kernel'
-import { spawn_diff } from './play/spawn_diff'
+import { spawn_diff } from './diff-kernel/spawn_diff'
 import { ChangeObject } from './common/change_object'
 import { ParallelOptions } from './common/parallel_options'
 import { GenerateString, ChangeString } from './util/generate_string'
