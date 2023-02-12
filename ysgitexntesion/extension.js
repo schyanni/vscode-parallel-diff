@@ -1,5 +1,7 @@
 const vscode = require('vscode');
 const fs = require('fs');
+const os = require("os");
+//const chalk = require("chalk");
 const default_diff = require('./src/js/diff-default/default_kernel')
 
 
@@ -43,10 +45,12 @@ async function selectFilesCommand() {
     const file2Content = await readFile(files[1].fsPath);
     let FillDiffs  = await default_diff.default_diff(file1Content, file2Content)
     const test123 = JSON.stringify(FillDiffs);
+    console.log("test");
 
     // Just to test files
     //vscode.window.showInformationMessage(`Contents of file 1: ${file1Content}\nContents of file 2: ${file2Content}`);
     vscode.window.showInformationMessage(`Contents of difffile ${test123}`);
+    openChangesFile(test123);
 }
 
 // Read the contents of a file
@@ -61,3 +65,40 @@ function readFile(filePath) {
         });
     });
 }
+// visualize the contents of a file
+function visualizeChanges(changes) {
+    // Create a temporary file
+    const filePath = `${os.tmpdir()}/changes.txt`;
+  
+    // Format the datas
+    const changesObj = JSON.parse(changes);
+    let output = "";
+    changesObj.forEach(change => {
+        if (change.added) {
+          output += `\x1b[32m${change.value}\x1b[0m`;
+        } else if (change.removed) {
+          output += `\x1b[31m${change.value}\x1b[0m`;
+        } else {
+          output += `${change.value}`;
+        }
+      });
+  
+    // Write the data to the temporary file
+    fs.writeFileSync(filePath, output);
+  
+    // Return the file path    
+    return filePath;
+  }
+
+  async function openChangesFile(changes) {
+    const filePath = visualizeChanges(changes);
+    const fileContents = fs.readFileSync(filePath, 'utf-8');
+    
+    const document = await vscode.workspace.openTextDocument({
+      content: fileContents,
+      language: 'plaintext'
+    });
+    await vscode.window.showTextDocument(document, {
+      preview: false
+    });
+  }
