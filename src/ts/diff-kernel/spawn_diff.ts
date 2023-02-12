@@ -73,13 +73,6 @@ function find_d_path(old_string: string, new_string: string): [number, d_path_el
             return [d, paths];
         }
 
-        temp2.sort((a: d_path_element, b: d_path_element) => {
-            const ka = a.x - a.y;
-            const kb = b.x - b.y;
-            if(ka == kb) return 0;
-            return ka < kb ? -1 : 1;
-        });
-
         paths[d] = new Array<d_path_element>(d+1);
         temp2.forEach( (value) => {
             const k = (value.x - value.y + d)/2;
@@ -87,53 +80,6 @@ function find_d_path(old_string: string, new_string: string): [number, d_path_el
                 paths[d][k] = value;
             }
         });
-
-
-        // paths[d - 1].forEach(path => {
-        //     let forked: d_path_element[] = fork_d_path(old_string, new_string, path);
-        //     if (forked[0].x >= old_string.length && forked[0].y >= new_string.length) {
-        //         // we are done
-        //         done = true;
-        //         path_0 = forked[0];
-        //     }
-        //     if (forked[0].x < old_string.length || forked[0].y < new_string.length) {
-        //         paths[d].push(forked[0]);
-        //     } // else drop it
-
-        //     if (forked[1].x >= old_string.length && forked[1].y >= new_string.length) {
-        //         // we are done
-        //         done = true;
-        //         path_0 = forked[1];
-        //     }
-        //     if (forked[1].x < old_string.length || forked[1].y < new_string.length) {
-        //         paths[d].push(forked[1]);
-        //     } // else drop it
-        // });
-
-        // // some clean up
-        // if (done) {
-        //     paths[d] = [path_0];
-        //     return [d, paths];
-        // }
-
-        // // reduce phase => we only need 1 d path on each diagonal (the furthest reaching one)
-        // // diagonal k = x-y
-        // let coord_map: Map<number, d_path_element> = new Map<number, d_path_element>();
-        // paths[d].forEach((path) => {
-        //     const k = path.x - path.y;
-        //     if (coord_map.has(k)) {
-        //         const other = coord_map.get(k);
-        //         if(other != undefined && path.x > other.x) {
-        //             coord_map.set(k, path);
-        //         }
-        //     } else {
-        //         coord_map.set(k, path);
-        //     }
-        // })
-        // paths[d] = [];
-        // coord_map.forEach((value: d_path_element) => {
-        //     paths[d].push(value);
-        // });
     }
 
     // no valid path found
@@ -162,7 +108,7 @@ function extract_change(old_string: string, new_string: string, d: number, paths
         }) ?? {x: -1, y: -1, horizontal: false, d_length: -1, snake_length: 0};
     }
 
-    if(end.snake_length > 0) {
+    if(end.snake_length > 1) {
         changes.push({count: end.snake_length-1, value: old_string.substring(end.x - end.snake_length+1, end.x)});
     }
 
