@@ -1,13 +1,13 @@
 import { ChangeObject } from "../common/change_object";
 import { ParallelOptions } from "../common/parallel_options";
 import { LevelledPathMatrix } from "./path_matrix";
-import { FunctionThread, spawn, Worker,Thread } from 'threads'
+import { FunctionThread, spawn, Worker, Thread } from 'threads'
 import { GrowDPathFunction, DCoordinate } from "./inner_loop_parallel_worker";
 import { BuildChangeObjects, ReconstrunctPath } from "./path_tools";
 import { performance } from 'perf_hooks';
 
 async function simple_parallelization_kernel(old_string: string, new_string: string, options: ParallelOptions): Promise<[number, LevelledPathMatrix]> {
-    let workers: FunctionThread<[string, string, number,number, number, number], DCoordinate>[] = [];
+    let workers: FunctionThread<[string, string, number, number, number, number], DCoordinate>[] = [];
     for (let i: number = 0; i < options.threads; ++i) {
         const spawned = await spawn<GrowDPathFunction>(new Worker("./inner_loop_parallel_worker"));
         workers.push(spawned);
@@ -36,7 +36,7 @@ async function simple_parallelization_kernel(old_string: string, new_string: str
             let promises: Promise<DCoordinate>[] = [];
             let previous_k = k;
             for (let i: number = 0; i < options.threads && k <= d; ++i, k += 2) {
-                promises.push(workers[i](old_string, new_string, paths.get(d-1, k-1), paths.get(d-1, k+1), k, d));
+                promises.push(workers[i](old_string, new_string, paths.get(d - 1, k - 1), paths.get(d - 1, k + 1), k, d));
             }
 
             let coords = await Promise.all(promises);
@@ -62,7 +62,7 @@ async function simple_parallelization_kernel(old_string: string, new_string: str
 }
 
 export async function inner_loop_parallel_diff(old_string: string, new_string: string, options?: ParallelOptions | undefined): Promise<ChangeObject[]> {
-    let loptions: ParallelOptions = {threads: 1, repeats: 1}
+    let loptions: ParallelOptions = { threads: 1, repeats: 1 }
     if (typeof (options) != undefined && options != undefined) {
         loptions = options;
     }
@@ -84,5 +84,4 @@ export async function inner_loop_parallel_diff(old_string: string, new_string: s
     }
 
     return changes;
-
 }

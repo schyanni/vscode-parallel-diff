@@ -8,7 +8,6 @@ export interface DCoordinate {
 
 export function GrowDPath(old_string: string, new_string: string, value_left: number, value_right:number, k: number, d:number) : DCoordinate {
     //console.log(`In worker at d=${d}, k=${k}. M(d-1,k-1) = ${value_left}, M(d-1, k+1) = ${value_right}`)
-
     let x:number, y:number;
     if(k == -d || (k != d && value_left < value_right)) {
         x = value_right;
