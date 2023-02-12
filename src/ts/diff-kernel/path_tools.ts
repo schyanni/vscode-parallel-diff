@@ -42,7 +42,7 @@ export function ReconstrunctPath(left: string, path_length: number, path_matrix:
 
 }
 
-function MergeSameChangeActions(changes: ChangeObject[]): ChangeObject[] {
+export function MergeSameChangeActions(changes: ChangeObject[]): ChangeObject[] {
     let i: number = 1;
     let j: number = 0;
     let merged: ChangeObject[] = [];
