@@ -8,7 +8,7 @@ export interface d_path_element {
     d_length: number;
 }
 
-async function fork_d_path(old_string: string, new_string: string, path: d_path_element): Promise<d_path_element[]> {
+function fork_d_path(old_string: string, new_string: string, path: d_path_element): d_path_element[] {
     let horizontal: d_path_element = {
         x: path.x + 1, y: path.y, horizontal: true,
         snake_length: 0, d_length: path.d_length + 1
@@ -32,7 +32,7 @@ async function fork_d_path(old_string: string, new_string: string, path: d_path_
         vertical.snake_length++;
     }
 
-    return [horizontal, vertical];
+    return new Array<d_path_element>(horizontal, vertical);
 }
 
 export type fork_d_path_function = typeof fork_d_path;

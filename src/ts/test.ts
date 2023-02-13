@@ -7,6 +7,7 @@ import { GenerateString, ChangeString } from './util/generate_string'
 import { ApplyBackwardChange, ApplyForwardChange } from './diff-kernel/change_tools'
 import { inner_loop_parallel_diff } from './diff-kernel/inner_loop_parallel_kernel'
 import { matrix_diff } from './diff-kernel/matrix_diff'
+import { spawn_parallel_diff } from './diff-kernel/spawn_parallel_diff'
 
 let left: string = "Hello there, General Kenobi"
 let right: string = "guguseli there, Generalissimo Keno"
@@ -86,6 +87,20 @@ default_diff(left, right, options)
         console.log("");
     })
     .then(() => spawn_diff(left, right, options))
+    .then((value) => {
+        let changes: ChangeObject[] = value;
+        console.log("------------------------");
+        console.log(`Can change old string into new string: ${right == ApplyForwardChange(left, changes)}`);
+        console.log(`Can change new string into old string: ${left == ApplyBackwardChange(right, changes)}`);
+        console.log(`Number of changes: ${changes.length}`);
+        //console.log(JSON.stringify(changes));
+    })
+    .then(() => {
+        console.log("------------------------");
+        console.log("Parallel Fork-spawn implementation:")
+        console.log("");
+    })
+    .then(() => spawn_parallel_diff(left, right, options))
     .then((value) => {
         let changes: ChangeObject[] = value;
         console.log("------------------------");
