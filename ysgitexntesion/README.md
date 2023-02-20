@@ -1,65 +1,38 @@
-# ysgitexntesion README
+# ysgitexntesion
 
-This is the README for your extension "ysgitexntesion". After writing up a brief description, we recommend including the following sections.
+1.	Ausgangslage 
 
-## Features
+In der Software Entwicklung wird häufig mit Versionierungssystemen wie Git und Pull Requests gearbeitet, welche es erlauben, die gemachten Änderungen einzusehen. Die Darstellung dieser Differenzen erfolgt häufig über ein webbasiertes Tool; entweder direkt über die Webseite spezifischer Git-Hoster wie github.com und gitlab.com, oder zum Beispiel auch über den Chromium-basierten Code Editor VS Code. 
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+ 
 
-For example if there is an image subfolder under your extension project workspace:
+2.	Problemstellung 
 
-\!\[feature X\]\(images/feature-x.png\)
+Es soll eine Extension für Visual Studio Code entworfen werden, welche den Output eines Diff-Kernels darstellen kann. Für den Diff-Kernel sollen verschiedene Parallelisierungs-Strategien erarbeitet und diese innerhalb des von VS Code vorgebebenen Frameworks (JavaScript mit Chromium/Electron) umgesetzt werden. Die Auswirkungen der verschiedenen Strategien sollen miteinander verglichen werden. 
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-## Requirements
+3.	Ziele 
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Ziel ist das Designen und Erstellen einer einfachen Extension für VS Code, die den Output eines Diff/Kernels anzeigen kann, sowie die Entwicklung, Implementation und Vergleich verschiedener Parallelisierung-Strategien für einen Diff-Kernel. Konkret beinhaltet dies: 
 
-## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Eine einfache Diff-Viewer Extension für VS Code, um das Diff zwischen zwei Files zu sehen 
 
-For example:
+Verschiedene Parallelisierungs-Strategien für einen geeigneten Diff-Kernel erarbeiten und umsetzen 
 
-This extension contributes the following settings:
+Kontext- & Use Case Diagramme erstellen für die Extension 
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+Analyse und Erörterung der Strategien mit Hilfe geeigneter Diagramme 
 
-## Known Issues
+Auswertung der Strategien 
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+ 
 
-## Release Notes
 
-Users appreciate release notes as you update your extension.
+4.	Wissenschaftliche Methoden 
 
-### 1.0.0
+Analyse & Vergleich verschiedener Parallelisierungs-Strategien eines Diff-Kernels 
 
-Initial release of ...
+Kleine Literaturrecherche bezüglich Diff-Kernel 
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Kleine Literaturrecherche, bezüglich JavaScript, Parallelisierung in JavaScript und dem Framework für Extensions für VS Code 
