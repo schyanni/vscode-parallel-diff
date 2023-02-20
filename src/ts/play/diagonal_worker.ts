@@ -54,14 +54,18 @@ function line_scan(k: number): LineScanSegment[] {
   return scan;
 }
 
-class Diagonal {
+export class Diagonal {
   line_scan: LineScanSegment[];
   k: number;
   updates: SegmentUpdate[];
 
-  constructor(k: number) {
+  constructor(k: number, segments?: LineScanSegment[] | undefined) {
     this.k = k;
-    this.line_scan = line_scan(k);
+    if (segments != undefined) {
+      this.line_scan = segments;
+    } else {
+      this.line_scan = line_scan(k);
+    }
     this.updates = [];
   }
 
@@ -132,9 +136,9 @@ const diagonal_worker = {
     })
     return outgoing;
   },
-  get_diagonals() : LineScanSegment[][] {
+  get_diagonals(): LineScanSegment[][] {
     let result: LineScanSegment[][] = [];
-    diagonals.forEach( (value: Diagonal) => {
+    diagonals.forEach((value: Diagonal) => {
       result.push(value.get_segments());
     });
     return result;

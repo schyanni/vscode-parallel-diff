@@ -1,8 +1,9 @@
 import { ChangeObject } from '../common/change_object';
 import { ParallelOptions } from '../common/parallel_options';
-import { LineScanSegment, SegmentUpdate, Diagonal_Worker } from './diagonal_worker'
+import { LineScanSegment, SegmentUpdate, Diagonal_Worker, Diagonal } from './diagonal_worker'
 import { spawn, ModuleThread, Worker } from 'threads'
 import { ObservablePromise } from 'threads/dist/observable-promise';
+import { performance } from 'perf_hooks'
 
 async function diagonal_kernel(old_string: string, new_string: string, options: ParallelOptions): Promise<LineScanSegment[][]> {
   let workers: ModuleThread<Diagonal_Worker>[] = [];
@@ -62,10 +63,59 @@ async function diagonal_kernel(old_string: string, new_string: string, options: 
   worker_map.set(0, index);
   await add_diagonal(0).then(() => apply_update(initial_update));
 
-  let all_diagonals: Promise<LineScanSegment[]>[] = [];
+  let all_diagonals: Promise<LineScanSegment[][]>[] = [];
   workers.forEach(worker => {
-    all_diagonals.concat()
-  })
+    all_diagonals.push(worker.get_diagonals())
+  });
+
+  let result: LineScanSegment[][] = [];
+  await Promise.all(all_diagonals).then(value => value.forEach(group => result.concat(group)));
+  return result;
+}
+
+function map_diagonals(diagonals: LineScanSegment[][]): Map<number, Diagonal> {
+  let map = new Map<number, Diagonal>();
+  diagonals.forEach(diagonal => {
+    if (diagonal.length > 0) {
+      map.set(diagonal[0].k, new Diagonal(diagonal[0].k, diagonal));
+    }
+  });
+  return map;
+}
+
+function extract_change(diagonals: Map<number, Diagonal>, k: number, d: number, old_str: string, new_str: string): ChangeObject[] {
+  let changes: ChangeObject[] = [];
+  let x = old_str.length - 1;
+  while (d >= 0) {
+    let diag = diagonals.get(k) ?? new Diagonal(NaN);
+    let segments = diag.get_segments();
+    let segment = segments.find(s => { return s.x <= x && x < s.x + s.length && s.d == d }) ?? { d: NaN, k: NaN, x: NaN, length: NaN };
+
+    if (segment.length > 1) {
+      changes.push({ count: segment.length - 1, value: old_str.substring(segment.x + 1, segment.x + segment.length) });
+    }
+
+    if (segment.horizontal == true) {
+      changes.push({ count: 1, value: old_str[segment.x], removed: true });
+      k = k - 1;
+      x = segment.x - 1;
+    } else if (segment.horizontal == false) {
+      let y = segment.x - k;
+      changes.push({ count: 1, value: new_str[y], added: true });
+      k = k + 1;
+      x = segment.x
+    } else {
+      throw new Error(`Segment can only have at d=0 an unset horizontal. Is now at d=${d}`);
+    }
+
+    d = d - 1;
+  }
+
+  // handle case d=0;
+
+  changes = changes.reverse();
+  changes.shift();
+  return changes;
 }
 
 
@@ -77,4 +127,22 @@ export async function diagonal_parallel_diff(old_string: string, new_string: str
 
   old_string = "0" + old_string;
   new_string = "0" + new_string;
+
+  let start: any = performance.now();
+  let diagonals = await diagonal_kernel(old_string, new_string, loptions);
+  let middle: any = performance.now();
+
+  let map = map_diagonals(diagonals);
+  let k: number = old_string.length - new_string.length;
+  let d: number = map.get(k)?.get_d() ?? NaN;
+  let changes = extract_change(map, k, d, old_string, new_string);
+  let stop: any = performance.now();
+
+  if (typeof (parallel_options) != undefined && parallel_options != undefined && parallel_options.report != undefined) {
+    parallel_options.report(`compute [ms]: ${(middle as number) - (start as number)}`);
+    parallel_options.report(`reconstruct [ms]: ${(stop as number) - (middle as number)}`);
+    parallel_options.report(`total [ms]: ${(stop as number) - (start as number)}`);
+  }
+  return changes;
+
 }
