@@ -1,14 +1,27 @@
-import { expose } from 'threads/worker'
-import { LineScanSegment, SegmentUpdate } from './diagonal'
 
-// Module Data ----------------------------------------
+export interface LineScanSegment {
+  d: number,
+  k: number,
+  x: number,
+  length: number,
+  horizontal?: boolean | undefined
+}
+
+export interface SegmentUpdate {
+  k: number,
+  d: number,
+  x: number,
+  horizontal: boolean
+}
 
 let old_str: string;
 let new_str: string;
 
-let diagonals: Map<number, Diagonal> = new Map<number, Diagonal>();
+export function set_string(old_string: string, new_string: string) {
+  old_str = old_string;
+  new_str = new_string;
+}
 
-// Module functions -----------------------------------
 function line_scan(k: number): LineScanSegment[] {
   let scan: LineScanSegment[] = [];
 
@@ -39,14 +52,20 @@ function line_scan(k: number): LineScanSegment[] {
   return scan;
 }
 
-class Diagonal {
+
+
+export class Diagonal {
   line_scan: LineScanSegment[];
   k: number;
   updates: SegmentUpdate[];
 
-  constructor(k: number, segments: LineScanSegment[]) {
+  constructor(k: number, segments?: LineScanSegment[] | undefined) {
     this.k = k;
-    this.line_scan = segments;
+    if (segments == undefined) {
+      this.line_scan = line_scan(k);
+    } else {
+      this.line_scan = segments;
+    }
     this.updates = [];
   }
 
@@ -95,39 +114,3 @@ class Diagonal {
     return this.line_scan;
   }
 }
-
-
-const diagonal_worker = {
-  set_strings(old_string: string, new_string: string): void {
-    old_str = old_string;
-    new_str = new_string;
-  },
-  add_diagonal(k: number): void {
-    if (!diagonals.has(k)) {
-      let diagonal = new Diagonal(k, line_scan(k));
-      diagonals.set(k, diagonal);
-    }
-  },
-  apply_update(updates: SegmentUpdate[]): SegmentUpdate[] {
-    let outgoing: SegmentUpdate[] = [];
-    updates.forEach(update => {
-      let diag = diagonals.get(update.k);
-      if (diag != undefined) {
-        outgoing = outgoing.concat(diag.apply_update(update));
-      }
-    })
-    return outgoing;
-  },
-  get_diagonals(): LineScanSegment[][] {
-    let result: LineScanSegment[][] = [];
-    diagonals.forEach((value: Diagonal) => {
-      result.push(value.get_segments());
-    });
-    return result;
-  }
-}
-
-export type Diagonal_Worker_Type = typeof diagonal_worker;
-expose(diagonal_worker);
-
-
