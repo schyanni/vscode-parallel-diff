@@ -16,6 +16,10 @@
       {
         "command": "ysgitexntesion.selectFilesCommand",
         "title": "DiffFiles"
+      },
+      {
+        "command": "ysgitexntesion.doBenchmarkCommand",
+        "title": "DiffFiles: Benchmark"
       }
     ]
   },

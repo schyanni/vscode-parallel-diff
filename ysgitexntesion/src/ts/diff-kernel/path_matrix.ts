@@ -3,7 +3,13 @@ interface DLevel {
     values: [number, number][]
 }
 
-export class PathMatrix {
+export interface IPathMatrix {
+    get(d_level: number, k_diagonal: number) : number;
+
+    set(d_level: number, k_diagonal: number, x:number) : void;
+}
+
+export class PathMatrix implements IPathMatrix {
     private path_array: number[];
 
     constructor() {
@@ -27,6 +33,9 @@ export class PathMatrix {
 
     public get(d_level: number, k_diagonal: number): number {
         let idx: number = this.index(d_level, k_diagonal);
+        if(idx < 0 || idx >= this.path_array.length) {
+            return Infinity;
+        }
         return this.path_array[idx];
     }
 
@@ -58,7 +67,7 @@ export class PathMatrix {
     }
 }
 
-export class LevelledPathMatrix {
+export class LevelledPathMatrix implements IPathMatrix {
     private path_arrays: number[][];
 
     constructor() {
@@ -78,11 +87,23 @@ export class LevelledPathMatrix {
 
     public set(d_level: number, k_diagonal: number, x: number): void {
         let idx: number = this.index(d_level, k_diagonal);
+        //console.log(`M.set(): d=${d_level}, k=${k_diagonal}, x=${x} => idx=${idx}`)
         this.path_arrays[d_level][idx] = x;
     }
 
     public get(d_level: number, k_diagonal: number): number {
         let idx: number = this.index(d_level, k_diagonal);
+        if(idx < 0 || idx >= this.path_arrays[d_level].length) {
+            return Infinity;
+        }
         return this.path_arrays[d_level][idx];
     }
 }
+
+export function ToArrayIndex(d_level: number, k_diagonal: number) : number {
+    return ((d_level + k_diagonal) / 2 >> 0);
+}
+
+export function GetArrayForLevel(d_level: number) : Array<number> {
+    return new Array<number>(d_level + 1);
+} 

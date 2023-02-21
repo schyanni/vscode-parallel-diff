@@ -1,8 +1,8 @@
-import { PathMatrix } from "./path_matrix";
+import { IPathMatrix } from "./path_matrix";
 import { ChangeObject } from "../common/change_object";
 
-export function ReconstrunctPath(left: string, path_length: number, path_matrix: PathMatrix): [number, number][] {
-    function FindDiagonal(x_coord: number, d_level: number, path_matrix: PathMatrix): number {
+export function ReconstrunctPath(left: string, path_length: number, path_matrix: IPathMatrix): [number, number][] {
+    function FindDiagonal(x_coord: number, d_level: number, path_matrix: IPathMatrix): number {
         for (let k: number = -d_level; k <= d_level; k += 2) {
             if (path_matrix.get(path_length, k) == x_coord) {
                 return k;
@@ -40,6 +40,33 @@ export function ReconstrunctPath(left: string, path_length: number, path_matrix:
 
     return path.reverse();
 
+}
+
+export function MergeSameChangeActions(changes: ChangeObject[]): ChangeObject[] {
+    let i: number = 1;
+    let j: number = 0;
+    let merged: ChangeObject[] = [];
+
+    if (changes.length == 0) {
+        return merged;
+    }
+
+    merged.push(changes[0]);
+    while (i < changes.length) {
+        if (changes[i].added === merged[j].added && changes[i].removed === merged[j].removed) {
+            // they are the same type
+            merged[j].value += changes[i].value;
+            merged[j].count = (merged[j].count ?? 0) + (changes[i].count ?? 0);
+            ++i;
+        } else {
+            // it is a new element
+            merged.push(changes[i]);
+            ++j;
+            ++i;
+        }
+    }
+
+    return merged;
 }
 
 export function BuildChangeObjects(left: string, right: string, path: [number, number][]): ChangeObject[] {
@@ -80,5 +107,6 @@ export function BuildChangeObjects(left: string, right: string, path: [number, n
         current = next;
     }
 
+    changeObjects = MergeSameChangeActions(changeObjects);
     return changeObjects;
 }

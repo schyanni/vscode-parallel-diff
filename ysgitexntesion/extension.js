@@ -3,6 +3,7 @@ const fs = require('fs');
 const os = require("os");
 //const chalk = require("chalk");
 const default_diff = require('./src/js/diff-default/default_kernel')
+const benchmark = require('./src/js/benchmark')
 
 
 
@@ -14,7 +15,10 @@ function activate(context) {
     context.subscriptions.push(
         vscode.commands.registerCommand('ysgitexntesion.selectFilesCommand', selectFilesCommand)
     );
-}
+    context.subscriptions.push(
+      vscode.commands.registerCommand('ysgitexntesion.doBenchmarkCommand', doBenchmarkCommand)
+    );
+  }
 
 function deactivate() {}
 
@@ -49,6 +53,39 @@ async function selectFilesCommand() {
 
     vscode.window.showInformationMessage(`Contents of difffile ${test123}`);
     openChangesFile(test123);
+}
+
+async function doBenchmarkCommand() {
+  const files = await vscode.window.showOpenDialog({
+      canSelectMany: true,
+      openLabel: "Select 2 Files",
+      filters: {
+          'All files': ['*']
+      }
+  });
+
+  if (!files) {
+      return;
+  }
+
+  if (files.length !== 2) {
+      vscode.window.showInformationMessage("Please select exactly two files.");
+      return;
+  }
+
+  vscode.window.showInformationMessage("Started bencharmk...");
+  // Read the contents of the selected files
+  const file1Content = await readFile(files[0].fsPath);
+  const file2Content = await readFile(files[1].fsPath);
+  let measurements = await benchmark.Benchmark(file1Content, file2Content, 5, [1, 4]);
+  const document = await vscode.workspace.openTextDocument({
+    content: measurements,
+    language: 'plaintext'
+  });
+  await vscode.window.showTextDocument(document, {
+    preview: false
+  });
+  vscode.window.showInformationMessage("Completed benchmark");
 }
 
 // Read the contents of a file
