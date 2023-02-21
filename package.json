@@ -2,7 +2,11 @@
   "dependencies": {
     "ansi-to-html": "^0.7.2",
     "chalk": "^5.2.0",
+    "fs": "^0.0.1-security",
     "typescript": "^4.9.5",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.0"
   }
 }
