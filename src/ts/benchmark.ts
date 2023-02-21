@@ -25,7 +25,7 @@ async function do_benchmark(kernel: kernel_fn, kernel_name: string, old_string: 
     return measurements;
 }
 
-export async function Benchmark(new_string: string, old_string: string, repetitions?: number | undefined, threads?: number[] | undefined, file_name?: string | undefined) : Promise<void> {
+export async function Benchmark(new_string: string, old_string: string, repetitions?: number | undefined, threads?: number[] | undefined, file_name?: string | undefined) : Promise<string> {
     // do serial implementations
     let measurements: string = "#algorithm,iteration,threads,kernel_time,path_time,total_time\n";
     if(repetitions == undefined) {
@@ -65,9 +65,9 @@ export async function Benchmark(new_string: string, old_string: string, repetiti
 
     if(file_name != undefined) {
         writeFileSync(file_name, measurements);
-    } else {
-        console.log(measurements);
     }
+
+    return measurements;
 }
 
 let string_1: string = "hello there, this is the general kenobi. The one and only."
