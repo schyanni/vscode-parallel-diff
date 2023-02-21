@@ -47,8 +47,6 @@ async function selectFilesCommand() {
     const test123 = JSON.stringify(FillDiffs);
     console.log("test");
 
-    // Just to test files
-    //vscode.window.showInformationMessage(`Contents of file 1: ${file1Content}\nContents of file 2: ${file2Content}`);
     vscode.window.showInformationMessage(`Contents of difffile ${test123}`);
     openChangesFile(test123);
 }
