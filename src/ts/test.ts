@@ -17,7 +17,7 @@ right = ChangeString(left, 0.2);
 
 //left = "haha"
 //right = "hehe"
-let options: ParallelOptions = { threads: 4, repeats: 1, report: console.log }
+let options: ParallelOptions = { threads: 4, repetition: 1, report: console.log }
 
 
 console.log('-------------------------')
