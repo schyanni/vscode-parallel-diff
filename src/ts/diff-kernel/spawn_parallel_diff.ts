@@ -98,7 +98,7 @@ function extract_change(old_string: string, new_string: string, d: number, paths
 
 
 export async function spawn_parallel_diff(old_string: string, new_string: string, parallel_options?: ParallelOptions | undefined): Promise<ChangeObject[]> {
-    let loptions: ParallelOptions = { threads: 1, repeats: 1 }
+    let loptions: ParallelOptions = { threads: 1, repetition: 1 }
     if (typeof (parallel_options) != undefined && parallel_options != undefined) {
         loptions = parallel_options;
     }
@@ -115,10 +115,10 @@ export async function spawn_parallel_diff(old_string: string, new_string: string
     changes = MergeSameChangeActions(changes);
     let stop: any = performance.now();
 
-    if (typeof (parallel_options) != undefined && parallel_options != undefined && parallel_options.report != undefined) {
-        parallel_options.report(`compute [ms]: ${(middle as number) - (start as number)}`);
-        parallel_options.report(`reconstruct [ms]: ${(stop as number) - (middle as number)}`);
-        parallel_options.report(`total [ms]: ${(stop as number) - (start as number)}`);
+    if(parallel_options != undefined) {
+        parallel_options.kernel_time = (middle as number) - (start as number);
+        parallel_options.reconstruction_time = (stop as number) - (middle as number);
+        parallel_options.total_time = (stop as number) - (start as number);
     }
 
     return changes;

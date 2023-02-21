@@ -8,13 +8,10 @@ export async function default_diff(left: string, right: string, parallel_options
     let changes: Change[] = diffChars(left, right);
     let stop: any = performance.now();
 
-    if (typeof (parallel_options) != undefined && parallel_options != undefined) {
-        if (parallel_options.report != undefined) {
-            parallel_options.report(`compute [ms]: ${stop as number - start as number}`);
-            parallel_options.report('reconstruct [ms]: 0');
-            parallel_options.report(`total [ms]: ${stop as number - start as number}`);
-        }
-
+    if(parallel_options != undefined) {
+        parallel_options.kernel_time = (stop as number) - (start as number);
+        parallel_options.reconstruction_time = 0;
+        parallel_options.total_time = (stop as number) - (start as number);
     }
     return changes as ChangeObject[];
 }

@@ -62,7 +62,7 @@ async function simple_parallelization_kernel(old_string: string, new_string: str
 }
 
 export async function inner_loop_parallel_diff(old_string: string, new_string: string, options?: ParallelOptions | undefined): Promise<ChangeObject[]> {
-    let loptions: ParallelOptions = { threads: 1, repeats: 1 }
+    let loptions: ParallelOptions = { threads: 1, repetition: 1 }
     if (typeof (options) != undefined && options != undefined) {
         loptions = options;
     }
@@ -77,10 +77,10 @@ export async function inner_loop_parallel_diff(old_string: string, new_string: s
     let changes: ChangeObject[] = BuildChangeObjects(old_string, new_string, path);
     let stop: any = performance.now();
 
-    if (loptions.report != undefined) {
-        loptions.report(`compute [ms]: ${(middle as number) - (start as number)}`);
-        loptions.report(`reconstruct [ms]: ${(stop as number) - (middle as number)}`);
-        loptions.report(`total [ms]: ${(stop as number) - (start as number)}`);
+    if(loptions != undefined) {
+        loptions.kernel_time = (middle as number) - (start as number);
+        loptions.reconstruction_time = (stop as number) - (middle as number);
+        loptions.total_time = (stop as number) - (start as number);
     }
 
     return changes;

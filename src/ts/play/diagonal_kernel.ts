@@ -1,5 +1,7 @@
 import { ChangeObject } from "../common/change_object";
+import { ParallelOptions } from "../common/parallel_options";
 import { MergeSameChangeActions } from "../diff-kernel/path_tools";
+import { performance } from 'perf_hooks';
 
 interface DCoordinate {
   d: number,
@@ -164,7 +166,8 @@ function extract_change(diagonals: Map<number, Diagonal>, k: number, d: number):
 }
 
 
-function kernel(old_string: string, new_string: string): ChangeObject[] {
+export async function diagonal_diff(old_string: string, new_string: string, parallel_options?: ParallelOptions | undefined): Promise<ChangeObject[]> {
+  let start: any = performance.now();
   old_str = "0" + old_string;
   new_str = "0" + new_string;
 
@@ -199,13 +202,16 @@ function kernel(old_string: string, new_string: string): ChangeObject[] {
       break;
     }
   }
-  console.log(`Found distance: ${target_diag.get_d()}`)
+
+  let middle: any = performance.now();
   let changes = extract_change(diagonals, old_str.length - new_str.length, target_diag.get_d());
-  return MergeSameChangeActions(changes);
+  changes = MergeSameChangeActions(changes);
+  let stop: any = performance.now();
+  if(parallel_options != undefined) {
+    parallel_options.kernel_time = (middle as number) - (start as number);
+    parallel_options.reconstruction_time = (stop as number) - (middle as number);
+    parallel_options.total_time = (stop as number) - (start as number);
+  }
+
+  return changes;  
 }
-
-
-let changes = kernel("hello there", "henlotheres");
-console.log("hello there")
-console.log("henlotheres")
-console.log(JSON.stringify(changes));

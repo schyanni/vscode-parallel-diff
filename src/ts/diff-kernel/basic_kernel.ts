@@ -3,6 +3,8 @@ import { ParallelOptions } from "../common/parallel_options";
 import { PathMatrix } from "./path_matrix";
 import { ReconstrunctPath, BuildChangeObjects } from "./path_tools";
 import { performance } from 'perf_hooks';
+import { parsePatch } from "diff";
+import { writeFileSync } from 'fs'
 
 function BuildDPath(left: string, right: string): [number, PathMatrix] {
     const size: number = left.length + right.length;
@@ -63,11 +65,27 @@ export async function greedy_diff(old_string: string, new_string: string, parall
     changeObjects = BuildChangeObjects(old_string, new_string, path);
 
     let stop: any = performance.now();
-
-    if(typeof(parallel_options) != undefined && parallel_options != undefined && parallel_options.report != undefined) {
-        parallel_options.report(`compute [ms]: ${(middle as number) - (start as number)}`);
-        parallel_options.report(`reconstruct [ms]: ${(stop as number) - (middle as number)}`);
-        parallel_options.report(`total [ms]: ${(stop as number) - (start as number)}`);
+    if(parallel_options != undefined) {
+        parallel_options.kernel_time = (middle as number) - (start as number);
+        parallel_options.reconstruction_time = (stop as number) - (middle as number);
+        parallel_options.total_time = (stop as number) - (start as number);
     }
+
     return changeObjects;
+}
+
+export async function benchmark_greedy_diff(old_string: string, new_string: string, threads: number, repetitions: number, file_name: string): Promise<ChangeObject[]> {
+    let measurements: string = "#iteration,threads,kernel_time,path_time\n";
+    let data: string[] = [];
+    let changes: ChangeObject[] = [];
+    for(let i: number = 0; i < repetitions; ++i) {
+        let options: ParallelOptions = { threads: threads, repetition: i};
+        changes = await greedy_diff(old_string, new_string, options);
+        data.push(`${i},${threads},${options.kernel_time},${options.reconstruction_time}\n`);
+    }
+
+    measurements = measurements.concat(...data);
+    writeFileSync(file_name, measurements);
+
+    return changes;
 }
