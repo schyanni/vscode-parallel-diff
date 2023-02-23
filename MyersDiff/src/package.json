@@ -10,12 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "diff": "^5.1.0",
+    "fs": "^0.0.1-security",
     "lorem-ipsum": "^2.0.8",
     "perf_hooks": "^0.0.1",
     "threads": "^1.7.0"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.3",
-    "@types/diff": "^5.0.2"
+    "@types/diff": "^5.0.2",
+    "@types/node": "^18.14.1"
   }
 }
