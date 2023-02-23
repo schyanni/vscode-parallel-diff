@@ -10,12 +10,15 @@ npm install -g typescript
 
 # to install it locally (only for the project)
 npm install typescript
+
+# to install all typescript dependencies:
+npm install
 ```
 
 To compile everything in the `ts` directory, use:
 ```bash
 # go to src-dir, if you are not already there
-cd src
+cd MyersDiff/src
 
 # compile typescript:
 tsc
@@ -61,10 +64,16 @@ export interface ParallelOptions {
     // the number of threads (=workers) to use
     threads: number;
     // the number of repetitions to perform (relevant for benchmarking)
-    repeats: number;
+    repetitions: number;
     // whether the output should be verified => meant for testing during development of the algorithms
     verify_solution?: boolean | undefined;
     // a function that takes a string. If provided, then the kernel can use this to report/log timings
     report?: ((message: string) => void) | undefined;
+    // Can be used to report the time the kernel took to compute the SES
+    kernel_time?: number | undefined
+    // Can be  used to report the time the kernel took to reconstruct the changes
+    reconstruction_time?: number | undefined
+    // Can be used to report the total time the kernel took to compute the changes
+    total_time?: number | undefined
 }
 ```
