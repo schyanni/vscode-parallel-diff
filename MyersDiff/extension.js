@@ -12,7 +12,7 @@ const default_diff = require('./src/js/diff-default/default_kernel')
  */
 function activate(context) {
     context.subscriptions.push(
-        vscode.commands.registerCommand('ysgitexntesion.selectFilesCommand', selectFilesCommand)
+        vscode.commands.registerCommand('MyersDiff.selectFilesCommand', selectFilesCommand)
     );
 }
 
