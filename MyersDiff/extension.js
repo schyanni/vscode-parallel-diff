@@ -13,10 +13,10 @@ const benchmark = require('./src/js/benchmark')
  */
 function activate(context) {
     context.subscriptions.push(
-        vscode.commands.registerCommand('ysgitexntesion.selectFilesCommand', selectFilesCommand)
+        vscode.commands.registerCommand('MyersDiff.selectFilesCommand', selectFilesCommand)
     );
     context.subscriptions.push(
-      vscode.commands.registerCommand('ysgitexntesion.doBenchmarkCommand', doBenchmarkCommand)
+      vscode.commands.registerCommand('MyersDiff.doBenchmarkCommand', doBenchmarkCommand)
     );
   }
 

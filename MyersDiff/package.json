@@ -1,6 +1,6 @@
 {
-  "name": "ysgitexntesion",
-  "displayName": "YSGitExntesion",
+  "name": "MyersDiff",
+  "displayName": "MyersDiff",
   "description": "Helps user with a simple UI to use GIT ",
   "version": "0.0.1",
   "engines": {
@@ -14,11 +14,11 @@
   "contributes": {
     "commands": [
       {
-        "command": "ysgitexntesion.selectFilesCommand",
+        "command": "MyersDiff.selectFilesCommand",
         "title": "DiffFiles"
       },
       {
-        "command": "ysgitexntesion.doBenchmarkCommand",
+        "command": "MyersDiff.doBenchmarkCommand",
         "title": "DiffFiles: Benchmark"
       }
     ]
